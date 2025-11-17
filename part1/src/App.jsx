@@ -1,46 +1,35 @@
 import { useState } from 'react'
 
+const Display = ({counter}) => <div>{counter}</div>
+
+const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
+
 const App = () => {
+  const [ counter, setCounter ] = useState(0)
 
+  const increaseByOne = () => setCounter(counter + 1)
+
+  const decreaseByOne = () => setCounter(counter - 1)
   
-  const [ counter, setCounter ] = useState(100)
-
-  const buildings = [
-    {
-      base: 1,
-      amount: 1,
-      mult: 1,
-      speed: 1000,
-      calc: function(){
-        return this.base * this.amount * this.mult
-      },
-      added: false
-    },
-    {
-      base: 2,
-      amount: 2,
-      mult: 1,
-      speed: 2000,
-      calc: function(){
-        return this.base * this.amount * this.mult
-      },
-      added: false
-    }
-  ]
-
-  buildings.forEach(building => {
-    if(building.added == true) return 0
-    setTimeout(
-      () => setCounter(counter+building.calc()),
-      building.speed
-    )
-    building.added = true
-  })
-
+  const setToZero = () => setCounter(0)
 
   return (
-    <div>{counter}</div>
+    <div>
+      <Display counter={counter}/>
+
+      <Button
+        onClick={increaseByOne}
+        text='plus'
+      />
+      <Button
+        onClick={setToZero}
+        text='zero'
+      />     
+      <Button
+        onClick={decreaseByOne}
+        text='minus'
+      />           
+    </div>
   )
 }
-
 export default App
