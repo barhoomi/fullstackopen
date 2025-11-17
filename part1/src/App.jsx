@@ -1,66 +1,46 @@
-const Header = (props) => {
-  return (
-    <h1>{props.course}</h1>
-  )
-}
-
-const Content = (props) => {
-  let output = props.parts.map((part, index) => {
-    return <Part part={part.name} exercises={part.exercises} key={index} />
-  });
-  return (
-    <div className="content">
-      {output}
-    </div>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <div className="part">
-      <p>{props.part} {props.exercises}</p>
-    </div>
-  )
-}
-
-
-const Total = (props) => {
-  const exercises = props.parts.map(p => p.exercises)
-  let total = 0;
-  exercises.forEach(element => {
-    total += element;
-  });
-  return (
-    <p>Number of exercises {total}</p>
-  )
-}
+import { useState } from 'react'
 
 const App = () => {
-  const course = {
-    name:'Half Stack application development',
-    parts:[
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
+
+  
+  const [ counter, setCounter ] = useState(100)
+
+  const buildings = [
+    {
+      base: 1,
+      amount: 1,
+      mult: 1,
+      speed: 1000,
+      calc: function(){
+        return this.base * this.amount * this.mult
       },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
+      added: false
+    },
+    {
+      base: 2,
+      amount: 2,
+      mult: 1,
+      speed: 2000,
+      calc: function(){
+        return this.base * this.amount * this.mult
       },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+      added: false
+    }
+  ]
+
+  buildings.forEach(building => {
+    if(building.added == true) return 0
+    setTimeout(
+      () => setCounter(counter+building.calc()),
+      building.speed
+    )
+    building.added = true
+  })
+
+
   return (
-    <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
+    <div>{counter}</div>
   )
 }
-
 
 export default App
