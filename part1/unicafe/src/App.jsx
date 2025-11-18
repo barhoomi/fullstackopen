@@ -8,7 +8,10 @@ const Button = ({callback, text}) => {
 
 const StatisticLine = ({value, text}) => {
   return (
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -18,15 +21,17 @@ const Statistics = ({good, neutral, bad, total})=>{
     return (
       <div>
         {output}
-        <div>
-          <StatisticLine value={good} text="good"/>
-          <StatisticLine value={neutral} text="neutral"/>
-          <StatisticLine value={bad} text="bad"/>
+        <table>
+          <tbody>
+            <StatisticLine value={good} text="good"/>
+            <StatisticLine value={neutral} text="neutral"/>
+            <StatisticLine value={bad} text="bad"/>
 
-          <StatisticLine value={total} text="all"/>
-          <StatisticLine value={(good-bad)/total} text="average"/>
-          <StatisticLine value={((good/total)*100)+" %"} text="positive"/>
-        </div>
+            <StatisticLine value={total} text="all"/>
+            <StatisticLine value={(good-bad)/total} text="average"/>
+            <StatisticLine value={((good/total)*100)+" %"} text="positive"/>
+          </tbody>
+        </table>
       </div>
     )
   }
