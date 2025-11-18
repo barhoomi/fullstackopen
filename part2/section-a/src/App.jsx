@@ -25,11 +25,8 @@ const Part = ({part,exercises}) => {
 
 
 const Total = ({parts}) => {
-  const exercises = parts.map(p => p.exercises)
-  let total = 0;
-  exercises.forEach(element => {
-    total += element;
-  });
+  const total = parts.reduce((s,p) => s+p.exercises, 0)
+
   return (
     <p>Total of {total} exercises</p>
   )
