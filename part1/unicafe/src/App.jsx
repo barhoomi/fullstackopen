@@ -6,9 +6,9 @@ const Button = ({callback, text}) => {
   )
 }
 
-const Display = ({state, text}) => {
+const StatisticLine = ({value, text}) => {
   return (
-    <p>{text} {state}</p>
+    <p>{text} {value}</p>
   )
 }
 
@@ -19,13 +19,13 @@ const Statistics = ({good, neutral, bad, total})=>{
       <div>
         {output}
         <div>
-          <Display state={good} text="good"/>
-          <Display state={neutral} text="neutral"/>
-          <Display state={bad} text="bad"/>
+          <StatisticLine value={good} text="good"/>
+          <StatisticLine value={neutral} text="neutral"/>
+          <StatisticLine value={bad} text="bad"/>
 
-          <Display state={total} text="all"/>
-          <Display state={(good-bad)/total} text="average"/>
-          <Display state={((good/total)*100)+" %"} text="positive"/>
+          <StatisticLine value={total} text="all"/>
+          <StatisticLine value={(good-bad)/total} text="average"/>
+          <StatisticLine value={((good/total)*100)+" %"} text="positive"/>
         </div>
       </div>
     )
@@ -48,21 +48,19 @@ const App = () => {
   const [bad, setBad] = useState(0)
   const total = good + neutral + bad
 
+  const increment = (callback,current,i) => {
+    return ()=>{callback(current+i)}
+  }
 
   return (
     <div>
       <h1>give feedback</h1>
       <div>
-        <Button callback={()=>{
-          setGood(good+1)
-          }} text="good" />
-        <Button callback={()=>{
-        setNeutral(neutral+1)
-        }} text="neutral" />
-        <Button callback={()=>{
-        setBad(bad+1)
-        }} text="bad" />
+        <Button callback={increment(setGood,good,1)} text="good"/>
+        <Button callback={increment(setNeutral,neutral,1)} text="neutral" />
+        <Button callback={increment(setBad,bad,1)} text="bad" />
       </div>
+
       <Statistics good={good} neutral={neutral} bad={bad} total={total}/>
     </div>
   )
