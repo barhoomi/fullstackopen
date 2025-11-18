@@ -31,7 +31,7 @@ const Total = ({parts}) => {
     total += element;
   });
   return (
-    <p>Number of exercises {total}</p>
+    <p>Total of {total} exercises</p>
   )
 }
 
@@ -40,6 +40,7 @@ const Course = ({course}) => {
         <div>
             <Header course = {course.name}/>
             <Content parts = {course.parts} />
+            <b><Total parts = {course.parts} /></b>
         </div>
     )
 }
