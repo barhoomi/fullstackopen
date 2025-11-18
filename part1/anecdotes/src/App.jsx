@@ -13,27 +13,52 @@ const App = () => {
   ]
 
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
-   
+
   const [selected, setSelected] = useState(0)
+
+  const highest = getHighestVotes(votes)
 
   function getRandomInt(max) {
     //non-inclusive of max
     const n = Math.floor(Math.random() * max);
-    console.log(n)
+    //console.log(n)
     return n
+  }
+
+  function getHighestVotes(votes){
+    let out = 0
+    for (let i = 0; i < votes.length; i++) {
+      const element = votes[i];
+      const h = votes[out]
+      if(element>h){
+        out = i
+      }
+    }
+    return out
   }
 
   return (
     <div>
-      {anecdotes[selected]}
-      <button onClick={()=>setSelected(getRandomInt(anecdotes.length))}>random</button>
-      <br></br>
-      {votes[selected]}
-      <button onClick={()=>{
-        const newVotes = [...votes]
-        newVotes[selected] += 1
-        setVotes(newVotes)
+      <div>
+        <h1> Highest voted anecdote </h1>
+        "{anecdotes[highest]}"
+        <br></br>
+        has <b>{votes[highest]}</b> votes
+      </div>
+      <hr></hr>
+      <div>
+        <h1> Random Andecdote</h1>
+        {anecdotes[selected]}
+        <br></br>
+        has <b>{votes[selected]}</b> votes
+        <br></br>
+        <button onClick={() => {
+          const newVotes = [...votes]
+          newVotes[selected] += 1
+          setVotes(newVotes)
         }}>vote</button>
+        <button onClick={() => setSelected(getRandomInt(anecdotes.length))}>next anecdote</button>
+      </div>
     </div>
   )
 }
