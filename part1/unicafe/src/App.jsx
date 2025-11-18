@@ -13,20 +13,31 @@ const Display = ({state, text}) => {
 }
 
 const Statistics = ({good, neutral, bad, total})=>{
-  return (
-    <div>
-      <h1>statistics</h1>
+  const output = <h1>statistics</h1>
+  if(total>0){
+    return (
       <div>
-        <Display state={good} text="good"/>
-        <Display state={neutral} text="neutral"/>
-        <Display state={bad} text="bad"/>
+        {output}
+        <div>
+          <Display state={good} text="good"/>
+          <Display state={neutral} text="neutral"/>
+          <Display state={bad} text="bad"/>
 
-        <Display state={total} text="all"/>
-        <Display state={(good-bad)/total} text="average"/>
-        <Display state={((good/total)*100)+" %"} text="positive"/>
+          <Display state={total} text="all"/>
+          <Display state={(good-bad)/total} text="average"/>
+          <Display state={((good/total)*100)+" %"} text="positive"/>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+  else{
+    return(
+      <div>
+        {output}
+        <p>No feedback given</p>
+      </div>
+    )
+  }
 }
 
 
