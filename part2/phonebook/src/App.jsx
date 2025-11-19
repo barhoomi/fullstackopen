@@ -1,10 +1,46 @@
 import { useState } from 'react'
 
-const List = ({ elements }) => {
+const Persons = ({ elements }) => {
   return (
     <ul>
       {elements.map(e => <li key={e.name}>{e.name} {e.number}</li>)}
     </ul>
+  )
+}
+
+const SearchFilter = ({ setFilter }) => {
+  return (
+    <form onSubmit={(event) => { event.preventDefault() }}>
+      filter shown with: <input onChange={event => setFilter(event.target.value)} />
+    </form>
+  )
+}
+
+const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons }) => {
+  const addPerson = (event) => {
+    event.preventDefault()
+
+    if (persons.map(p => p.name).includes(newName)) {
+      alert(`${newName} is already added to phonebook`)
+    }
+    else {
+      setPersons([...persons].concat({ name: newName, number: newNumber }))
+    }
+  }
+
+
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input onChange={(event) => setNewName(event.target.value)} />
+      </div>
+      <div>
+        number: <input onChange={(event) => setNewNumber(event.target.value)} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
   )
 }
 
@@ -19,18 +55,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
 
-  const addPerson = (event) => {
-    event.preventDefault()
 
-    if (persons.map(p => p.name).includes(newName)) {
-      alert(`${newName} is already added to phonebook`)
-    }
-    else {
-      setPersons([...persons].concat({ name: newName, number: newNumber }))
-    }
-  }
-
-  const filterPeople=(f) => {
+  const filterPeople = (f) => {
     return persons.filter(p => p.name.toLowerCase().includes(f))
   }
 
@@ -39,26 +65,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={(event)=>{event.preventDefault()}}>
-        filter shown with: <input onChange={event=>setFilter(event.target.value)}/>
-      </form>
-
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input onChange={(event) => setNewName(event.target.value)} />
-        </div>
-        <div>
-          number: <input onChange={(event) => setNewNumber(event.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-
-
-
+      
+      <SearchFilter setFilter={setFilter} />
+      
+      <PersonForm newName={newName}
+        newNumber={newNumber}
+        setNewName={setNewName}
+        setNewNumber={setNewNumber}
+        persons={persons}
+        setPersons={setPersons} />
+        
       <h2>Numbers</h2>
-      <List elements={shownPeople} />
+      
+      <Persons elements={shownPeople} />
     </div>
 
   )
