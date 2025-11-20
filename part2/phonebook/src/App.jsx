@@ -21,6 +21,7 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
   const addPerson = (event) => {
     event.preventDefault()
 
+    
 
     if (persons.map(p => p.name).includes(newName)) {
       alert(`${newName} is already added to phonebook`)
