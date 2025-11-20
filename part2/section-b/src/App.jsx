@@ -1,49 +1,50 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Note from './components/Note'
+import noteService from './services/notes'
 
-const Notes = ({ notes }) => {
+const Notes = ({ notes, toggleImportance }) => {
     return (
         <ul>
             {notes.map((note) => (
-                <Note key={note.id} note={note} />
+                <Note key={note.id} note={note} toggleImportance={toggleImportance} />
             ))}
         </ul>
     )
 }
 
-const App = (props) => {
-    const [notes, setNotes] = useState(props.notes)
+const App = () => {
+    const [notes, setNotes] = useState([])
     const [newNote, setNewNote] = useState("")
     const [showAll, setShowAll] = useState(true)
+
+    const loadNotes = () => {
+        noteService.getAll()
+            .then(n => {
+                setNotes(n)
+            })
+    }
+
+    useEffect(loadNotes, [])
+
+
 
     const notesToShow = showAll ? notes : notes.filter(n => n.important)
 
     const createNote = (n) => {
         const out = {
-            id: notes.length + 1,
             content: n,
             important: false
         }
-        //console.log(out)
         return out
     }
 
-
-
     const addNote = (event) => {
         event.preventDefault()
-        //console.log('button clicked', event.target)
-        const newNotes = [...notes]
-        newNotes.push(createNote(newNote))
-        setNotes(newNotes)
-        setNewNote("")
-        //console.log(newNotes)
-    }
-
-
-    const handleNoteChange = (event) => {
-        //console.log(event.target.value)
-        setNewNote(event.target.value)
+        noteService.create(createNote(newNote))
+            .then(n => {
+                setNotes(notes.concat(n))
+                setNewNote('')
+            })
     }
 
     const toggleShowAll = (event) => {
@@ -52,15 +53,24 @@ const App = (props) => {
         setShowAll(!showAll)
     }
 
+    const toggleImportance = (note) => {
+        const changedNote = { ...note, important: !note.important }
+        noteService.update(note.id, changedNote).then(loadNotes)
+            .catch(error => {
+                alert(`the note '${note.content}' was already deleted from server`)
+                setNotes(notes.filter((n) => n.id !== note.id))
+            })
+    }
+
     return (
         <div>
             <h1>Notes</h1>
             <button onClick={toggleShowAll}>{showAll ? "show only important" : "show all notes"}</button>
 
-            <Notes notes={notesToShow} />
+            <Notes notes={notesToShow} toggleImportance={toggleImportance} />
 
             <form onSubmit={addNote}>
-                <input value={newNote} onChange={handleNoteChange} />
+                <input value={newNote} onChange={(e) => setNewNote(e.target.value)} />
                 <button type="submit">save</button>
             </form>
 
