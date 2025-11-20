@@ -1,10 +1,23 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import personsService from './services/persons'
 
-const Persons = ({ elements }) => {
+const DeleteButton = ({ id, setPersons }) => {
+  const handeDeletion = () => {
+    const c = window.confirm(`are you sure you want to delete user ${id}?`)
+    if(c){
+      personsService.deletePerson(id)
+      .then(s => personsService.getPersons().then(p => setPersons(p)))
+    }
+  }
+  return (
+    <button onClick={handeDeletion}>Delete</button>
+  )
+}
+
+const Persons = ({ elements, setPersons }) => {
   return (
     <ul>
-      {elements.map(e => <li key={e.name}>{e.name} {e.number}</li>)}
+      {elements.map(e => <li key={e.name}>{e.name} {e.number} <DeleteButton id={e.id} setPersons={setPersons} /></li>)}
     </ul>
   )
 }
@@ -21,14 +34,14 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
   const addPerson = (event) => {
     event.preventDefault()
 
-    
+
 
     if (persons.map(p => p.name).includes(newName)) {
       alert(`${newName} is already added to phonebook`)
     }
     else {
-      personsService.addPerson(newName,newNumber)
-      .then(p => setPersons(persons.concat(p)))
+      personsService.addPerson(newName, newNumber)
+        .then(p => setPersons(persons.concat(p)))
     }
   }
 
@@ -54,11 +67,11 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
 
-  const getPersons = ()=>{
+  const getPersons = () => {
     personsService.getPersons().then(p => setPersons(p))
   }
 
-  useEffect(getPersons,[])
+  useEffect(getPersons, [])
 
   const filterPeople = (f) => {
     return persons.filter(p => p.name.toLowerCase().includes(f))
@@ -69,19 +82,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      
+
       <SearchFilter setFilter={setFilter} />
-      
+
       <PersonForm newName={newName}
         newNumber={newNumber}
         setNewName={setNewName}
         setNewNumber={setNewNumber}
         persons={persons}
         setPersons={setPersons} />
-        
+
       <h2>Numbers</h2>
-      
-      <Persons elements={shownPeople} />
+
+      <Persons elements={shownPeople} setPersons={setPersons} />
     </div>
 
   )
