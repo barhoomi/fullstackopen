@@ -2,6 +2,12 @@ import axios from "axios"
 
 const baseUrl = "http://localhost:3001/persons"
 
+const getPerson = (id)=>{
+    const url = `${baseUrl}/${id}`
+    const request = axios.get(url)
+    return request.then((res)=> res.data)
+}
+
 const getPersons = ()=>{
     const request = axios.get(baseUrl)
     return request.then(res=>res.data)
@@ -19,4 +25,10 @@ const deletePerson = (id) => {
     return request.then((res)=>res.data)
 }
 
-export default {getPersons,addPerson,deletePerson}
+const updateNumber = (person, newNumber) => {
+    const url = `${baseUrl}/${person.id}`
+    const request = axios.put(url,{...person,number:newNumber})
+    return request.then((res)=>res.data)
+}
+
+export default {getPersons,addPerson,deletePerson, updateNumber}

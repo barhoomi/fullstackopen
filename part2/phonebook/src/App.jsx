@@ -34,10 +34,26 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
   const addPerson = (event) => {
     event.preventDefault()
 
+    const getPersons = () => {
+      personsService.getPersons().then(p => setPersons(p))
+    }
 
 
-    if (persons.map(p => p.name).includes(newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const repeatName = persons.filter(p => p.name === newName)
+    console.log(repeatName)
+    if (repeatName.length > 0) {
+      
+      if(newNumber === repeatName[0].number){
+        alert(`${newName} is already added to phonebook`)
+      }
+      else{
+        const updateNumber = window.confirm(`user already exists, update number?`)
+        if(updateNumber){
+          personsService.updateNumber(repeatName[0],newNumber)
+          .then(p => getPersons())
+        }
+        return 0
+      }
     }
     else {
       personsService.addPerson(newName, newNumber)
@@ -74,6 +90,7 @@ const App = () => {
   useEffect(getPersons, [])
 
   const filterPeople = (f) => {
+    console.log(f)
     return persons.filter(p => p.name.toLowerCase().includes(f))
   }
 
