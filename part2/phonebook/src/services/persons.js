@@ -21,8 +21,16 @@ const addPerson = (name, number) => {
 
 const deletePerson = (id) => {
     const url = `${baseUrl}/${id}`
-    const request = axios.delete(url)
-    return request.then((res)=>res.data)
+    let request
+    try{
+        request = axios.delete(url).then(res => res, res => res.response)
+    }
+    catch(e){
+        console.log(e)
+    }
+    console.log(request)
+
+    return request
 }
 
 const updateNumber = (person, newNumber) => {
