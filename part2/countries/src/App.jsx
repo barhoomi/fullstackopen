@@ -20,7 +20,8 @@ const CountryInfo = ({ name }) => {
   const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api/name"
   const [countryInfo, setCountryInfo] = useState([])
 
-  const output = useEffect(() => {
+  console.log("name:",name)
+  useEffect(() => {
     axios.get(`${baseUrl}/${name}`).then(res => {
       const country = res.data
       if (country == null) {
@@ -35,16 +36,23 @@ const CountryInfo = ({ name }) => {
   return <div>{countryInfo}</div>
 }
 
-const CountiesList = ({ countries }) => {
-  const l = countries.length
+const CountriesList = ({ countries }) => {
+  const [displayedCountries,setDisplayedCountries] = useState([countries])
+  useEffect(()=>{
+    setDisplayedCountries(countries)
+  },[countries])
+  
 
-  switch (l) {
+
+  const l = displayedCountries.length
+
+    switch (l) {
     case 0:
       return <div></div>
     case 1:
       return (
         <div>
-          <CountryInfo name={countries[0]} />
+          <CountryInfo name={displayedCountries[0]} />
         </div>
       )
     default:
@@ -56,7 +64,7 @@ const CountiesList = ({ countries }) => {
           <ul>
             {countries.map(c =>
               <li key={c}>
-                {c}
+                {c} <button onClick={()=>setDisplayedCountries([c])}>show</button>
               </li>
             )}
           </ul>
@@ -80,8 +88,9 @@ function App() {
 
   const search = (event, query) => {
     event.preventDefault()
-
-    setQuery(query)
+    //resets the query so we can still search even if the query hasn't changed (e.g. after clicking a "show" button)
+    setQuery(null)
+    setTimeout(()=>setQuery(query),1)
   }
 
   useEffect(() => {
@@ -105,7 +114,7 @@ function App() {
   return (
     <div>
       <Search handleSearch={search} />
-      <CountiesList countries={countries} />
+      <CountriesList countries={countries} />
     </div>
   )
 }
