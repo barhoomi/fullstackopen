@@ -31,4 +31,4 @@ const updateNumber = (person, newNumber) => {
     return request.then((res)=>res.data)
 }
 
-export default {getPersons,addPerson,deletePerson, updateNumber}
+export default {getPersons,addPerson,deletePerson, updateNumber,getPerson}

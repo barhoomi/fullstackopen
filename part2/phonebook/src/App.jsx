@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import personsService from './services/persons'
+import Notification from './components/Notification'
 
-const DeleteButton = ({ id, setPersons }) => {
+const DeleteButton = ({ id, setPersons, setNotificationMessage }) => {
   const handeDeletion = () => {
     const c = window.confirm(`are you sure you want to delete user ${id}?`)
-    if(c){
+    if (c) {
+      personsService.getPerson(id).then(p => setNotificationMessage(`Deleted ${p.name}`))
       personsService.deletePerson(id)
-      .then(s => personsService.getPersons().then(p => setPersons(p)))
+        .then(s => personsService.getPersons().then(p => setPersons(p)))
+      setTimeout(() => setNotificationMessage(""), 3000)
     }
   }
   return (
@@ -14,10 +17,13 @@ const DeleteButton = ({ id, setPersons }) => {
   )
 }
 
-const Persons = ({ elements, setPersons }) => {
+const Persons = ({ elements, setPersons, setNotificationMessage }) => {
   return (
     <ul>
-      {elements.map(e => <li key={e.name}>{e.name} {e.number} <DeleteButton id={e.id} setPersons={setPersons} /></li>)}
+      {elements.map(e =>
+        <li key={e.name}>{e.name} {e.number}
+          <DeleteButton id={e.id} setPersons={setPersons} setNotificationMessage={setNotificationMessage}
+          /></li>)}
     </ul>
   )
 }
@@ -30,7 +36,7 @@ const SearchFilter = ({ setFilter }) => {
   )
 }
 
-const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons }) => {
+const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage }) => {
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -42,23 +48,28 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
     const repeatName = persons.filter(p => p.name === newName)
     console.log(repeatName)
     if (repeatName.length > 0) {
-      
-      if(newNumber === repeatName[0].number){
+
+      if (newNumber === repeatName[0].number) {
         alert(`${newName} is already added to phonebook`)
       }
-      else{
+      else {
         const updateNumber = window.confirm(`user already exists, update number?`)
-        if(updateNumber){
-          personsService.updateNumber(repeatName[0],newNumber)
-          .then(p => getPersons())
+        if (updateNumber) {
+          personsService.updateNumber(repeatName[0], newNumber)
+            .then(p => getPersons())
         }
+        setNotificationMessage(`updated number of ${newName} to ${newNumber}`)
+        setTimeout(() => setNotificationMessage(""), 3000)
         return 0
       }
     }
     else {
       personsService.addPerson(newName, newNumber)
         .then(p => setPersons(persons.concat(p)))
+      setNotificationMessage(`added new contact: ${newName} - ${newNumber}`)
+      setTimeout(() => setNotificationMessage(""), 3000)
     }
+
   }
 
 
@@ -82,6 +93,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState("")
 
   const getPersons = () => {
     personsService.getPersons().then(p => setPersons(p))
@@ -99,7 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Notification message={notificationMessage} />
       <SearchFilter setFilter={setFilter} />
 
       <PersonForm newName={newName}
@@ -107,11 +119,13 @@ const App = () => {
         setNewName={setNewName}
         setNewNumber={setNewNumber}
         persons={persons}
-        setPersons={setPersons} />
+        setPersons={setPersons}
+        setNotificationMessage={setNotificationMessage}
+      />
 
       <h2>Numbers</h2>
 
-      <Persons elements={shownPeople} setPersons={setPersons} />
+      <Persons elements={shownPeople} setPersons={setPersons} setNotificationMessage={setNotificationMessage} />
     </div>
 
   )
