@@ -41,6 +41,11 @@ app.post("/api/persons", (request, response) => {
             error: 'name missing'
         })
     }
+    if(persons.find(p=>p.name==body.name)){
+        return response.status(400).json({
+            error: 'name already in database'
+        })
+    }
 
     const newPerson = {
         "number": body.number,
