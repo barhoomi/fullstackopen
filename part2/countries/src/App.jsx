@@ -1,6 +1,26 @@
 import { useEffect, useState } from 'react'
 import axios, { all } from 'axios'
 
+const weather_api_key = import.meta.env.VITE_WEATHER_KEY
+
+
+const Weather = ({ lat, lon }) => {
+  const url = "https://api.openweathermap.org/data/2.5/weather?"
+  const part = "current,minutely,hourly,alerts"
+  const [weatherInfo, setWeatherInfo] = useState([])
+
+  axios.get(`${url}lat=${lat}&lon=${lon}&exclude=${part}&appid=${weather_api_key}`)
+    .then(res => {
+      setWeatherInfo(JSON.stringify(res.data))
+    })
+
+    return (
+      <div>
+        {weatherInfo}
+      </div>
+    )
+}
+
 const Search = ({ handleSearch }) => {
 
   const [value, setValue] = useState([])
@@ -16,11 +36,15 @@ const Search = ({ handleSearch }) => {
   )
 }
 
+
+
 const CountryInfo = ({ name }) => {
   const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api/name"
   const [countryInfo, setCountryInfo] = useState([])
+  const [lat, setLat] = useState([])
+  const [lon, setLon] = useState([])
 
-  console.log("name:",name)
+  console.log("name:", name)
   useEffect(() => {
     axios.get(`${baseUrl}/${name}`).then(res => {
       const country = res.data
@@ -33,20 +57,32 @@ const CountryInfo = ({ name }) => {
     })
   }, [name])
 
-  return <div>{countryInfo}</div>
+  useEffect(() => {
+    try {
+      setLat(countryInfo.capitalInfo.latlng[0])
+      setLon(countryInfo.capitalInfo.latlng[1])
+    } catch {
+      setLat(0)
+      setLon(0)
+    }
+  }, [countryInfo])
+  return <div>
+    {countryInfo}
+    <Weather lat={lat} lon={lon} />
+  </div>
 }
 
 const CountriesList = ({ countries }) => {
-  const [displayedCountries,setDisplayedCountries] = useState([countries])
-  useEffect(()=>{
+  const [displayedCountries, setDisplayedCountries] = useState([countries])
+  useEffect(() => {
     setDisplayedCountries(countries)
-  },[countries])
-  
+  }, [countries])
+
 
 
   const l = displayedCountries.length
 
-    switch (l) {
+  switch (l) {
     case 0:
       return <div></div>
     case 1:
@@ -64,7 +100,7 @@ const CountriesList = ({ countries }) => {
           <ul>
             {countries.map(c =>
               <li key={c}>
-                {c} <button onClick={()=>setDisplayedCountries([c])}>show</button>
+                {c} <button onClick={() => setDisplayedCountries([c])}>show</button>
               </li>
             )}
           </ul>
@@ -81,7 +117,7 @@ function App() {
   const [countries, setCountries] = useState([])
   const [query, setQuery] = useState(null)
   const [allCountries, setAllCountries] = useState([])
-  const getAllCountries = useEffect(() => {
+  useEffect(() => {
     const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api/all"
     axios.get(baseUrl).then(res => setAllCountries(res.data))
   }, [])
@@ -90,11 +126,11 @@ function App() {
     event.preventDefault()
     //resets the query so we can still search even if the query hasn't changed (e.g. after clicking a "show" button)
     setQuery(null)
-    setTimeout(()=>setQuery(query),1)
+    setTimeout(() => setQuery(query), 1)
   }
 
   useEffect(() => {
-    if (query == null){
+    if (query == null) {
       return
     }
     else {
