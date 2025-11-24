@@ -33,11 +33,25 @@ app.get("/api/persons/:id",(request,response)=>{
     const id = request.params.id
     const person = persons.find(p => p.id == id)
     if(person == null){
-        console.log("error")
+        console.log(`person with ID:${id} not found`)
         response.status(404).end()
     }
     else{
         response.json(person)
+    }
+})
+
+
+app.delete("/api/persons/:id",(request,response)=>{
+    const id = request.params.id
+    const person = persons.find(p => p.id == id)
+    if(person == null){
+        console.log(`person with ID:${id} does not exist, or was already deleted`)
+        response.status(404).end()
+    }
+    else{
+        persons = persons.filter(p => p.id !== id)
+        response.status(204).end()
     }
 })
 
