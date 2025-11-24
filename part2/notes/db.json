@@ -87,7 +87,7 @@
     {
       "id": "5acb",
       "content": "hello",
-      "important": false
+      "important": true
     },
     {
       "id": "f4c6",
@@ -102,7 +102,7 @@
     {
       "id": "5bc0",
       "content": "Hey so is this saved?",
-      "important": false
+      "important": true
     }
   ]
 }
