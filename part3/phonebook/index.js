@@ -1,5 +1,7 @@
+require("dotenv").config()
 const express = require("express")
 var morgan = require('morgan')
+const Person = require("./models/person")
 
 
 const app = express()
@@ -10,62 +12,26 @@ morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 
 app.use(morgan(':method :url :status :res[content-length] :body - :response-time ms'))
 
-let persons = [{
-        "id": "1",
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": "2",
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": "3",
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": "4",
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
+
 
 app.get("/api/persons", (request, response) => {
-    response.json(persons)
+    Person.find({}).then(person => response.json(person))
+    
 })
 
 app.post("/api/persons", (request, response) => {
     const body = request.body
 
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        })
-    }
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'name missing'
-        })
-    }
-    if(persons.find(p=>p.name==body.name)){
-        return response.status(400).json({
-            error: 'name already in database'
-        })
-    }
+    const newPerson = new Person({
+        number: body.number,
+        name: body.name,
+    })
 
-    const newPerson = {
-        "number": body.number,
-        "name": body.name,
-        "id": String(parseInt(Math.random() * 100000))
-    }
-
-    persons = persons.concat(newPerson)
+    newPerson.save().then(person => {
+        response.json(person)
+    })
     
-    console.log(`successfully added ${newPerson}`)
-    response.json(newPerson)
-
+    console.log(`successfully added new person`)
 })
 
 
