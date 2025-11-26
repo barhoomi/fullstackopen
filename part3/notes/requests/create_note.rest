@@ -3,5 +3,62 @@ Content-Type: application/json
 
 {
     "content": "adding a new note",
-    "important" : true
+    "important": true
+}
+
+
+###
+
+
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "HTML is easy",
+    "important": true,
+    "id": "69258cae32b6a8104bf7aa8d"
+}
+
+###
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "CSS is hard",
+    "important": true,
+    "id": "6925acae8c716232e1af162e"
+}
+
+###
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "React is cool",
+    "important": true,
+    "id": "6925ace1f407defa7917f703"
+}
+
+###
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Mongodb is interesting",
+    "important": true,
+    "id": "6925acea95fa2bb436d384e2"
+}
+
+###
+
+PUT http://localhost:3001/api/notes/692709e3dd609a92222c6d34
+Content-Type: application/json
+
+{
+    "content": "adding an old note",
+    "important": true
 }
