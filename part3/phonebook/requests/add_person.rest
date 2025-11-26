@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name":"Ibrahim",
-    "number":"055-4141-019"
+    "number":"055"
 }
 
 ###
