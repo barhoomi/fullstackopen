@@ -8,7 +8,9 @@ const app = express()
 app.use(express.json())
 app.use(express.static("dist"))
 
-morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('body', function (req, res) {
+    return JSON.stringify(req.body)
+})
 
 app.use(morgan(':method :url :status :res[content-length] :body - :response-time ms'))
 
@@ -31,7 +33,7 @@ app.post("/api/persons", (request, response, next) => {
         console.log(`successfully added new person`)
 
     }).catch(error => next(error))
-    
+
 })
 
 
@@ -40,7 +42,18 @@ app.get("/api/persons/:id", (request, response, next) => {
 
     Person.findById(id).then(person => {
         response.json(person)
-    }).catch(error=>next(error))
+    }).catch(error => next(error))
+})
+
+app.put("/api/persons/:id", (request, response , next) => {
+    const id = request.params.id
+    const body = request.body
+
+    Person.findById(id).then(person => {
+        person.name = body.name
+        person.number = body.number
+        person.save()
+    }).catch(error => next(error))
 })
 
 
@@ -61,12 +74,14 @@ app.get("/info", (request, response) => {
 
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+    response.status(404).send({
+        error: 'unknown endpoint'
+    })
 }
 
 app.use(unknownEndpoint)
 
-const errorHandler = (error, request, response, next) =>{
+const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
     return response.status(400).send({
