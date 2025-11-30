@@ -14,20 +14,14 @@ mongoose.connect(url, {
     })
 
 const personSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        minLength: 3
+    },
     number: String
 })
 
 const Person = mongoose.model("Person", personSchema)
-
-
-const createPerson = (name, number) => {
-    return new Person({
-        name: name,
-        number: number
-    })
-}
-
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {

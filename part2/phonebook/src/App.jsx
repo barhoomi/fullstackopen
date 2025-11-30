@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import personsService from './services/persons'
 import Notification from './components/Notification'
 
-const DeleteButton = ({ id, persons, setPersons, setNotificationMessage }) => {
+const DeleteButton = ({ id, persons, setPersons, setNotificationMessage, setNoficationType}) => {
   const handeDeletion = () => {
     const c = window.confirm(`are you sure you want to delete user ${id}?`)
     if (c) {
@@ -12,14 +12,15 @@ const DeleteButton = ({ id, persons, setPersons, setNotificationMessage }) => {
           personsService.getPersons().then(p => setPersons(p))
           const person = persons.filter(p => p.id == id)[0].name
 
-          if(res.status == 200){
+          if (res.status == 200) {
             setNotificationMessage(`Deleted ${person}`)
           }
-          else if(res.status == 404){
+          else if (res.status == 404) {
             setNotificationMessage(`${person} was already deleted`)
           }
-          
+
         })
+        setNoficationType("Normal")
       setTimeout(() => setNotificationMessage(""), 3000)
     }
   }
@@ -28,12 +29,12 @@ const DeleteButton = ({ id, persons, setPersons, setNotificationMessage }) => {
   )
 }
 
-const Persons = ({ elements, persons, setPersons, setNotificationMessage }) => {
+const Persons = ({ elements, persons, setPersons, setNotificationMessage, setNoficationType }) => {
   return (
     <ul>
       {elements.map(e =>
         <li key={e.name}>{e.name} {e.number}
-          <DeleteButton id={e.id} persons= {persons} setPersons={setPersons} setNotificationMessage={setNotificationMessage}
+          <DeleteButton id={e.id} persons={persons} setPersons={setPersons} setNotificationMessage={setNotificationMessage} setNoficationType={setNoficationType}
           /></li>)}
     </ul>
   )
@@ -47,7 +48,7 @@ const SearchFilter = ({ setFilter }) => {
   )
 }
 
-const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage }) => {
+const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage, setNoficationType: setNotificationType}) => {
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -70,14 +71,26 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
             .then(p => getPersons())
         }
         setNotificationMessage(`updated number of ${newName} to ${newNumber}`)
+        setNotificationType("normal")
+        setTimeout(() => setNotificationType(""), 3000)
         setTimeout(() => setNotificationMessage(""), 3000)
         return 0
       }
     }
     else {
       personsService.addPerson(newName, newNumber)
-        .then(p => setPersons(persons.concat(p)))
-      setNotificationMessage(`added new contact: ${newName} - ${newNumber}`)
+        .then(p => {
+          if (p) {
+            setPersons(persons.concat(p))
+            setNotificationMessage(`added new contact: ${newName} - ${newNumber}`)
+            setNotificationType("normal")
+          }
+        }).catch(e => {
+          console.log(e)
+          setNotificationMessage(e.message)
+          setNotificationType("error")
+        })
+
       setTimeout(() => setNotificationMessage(""), 3000)
     }
 
@@ -105,6 +118,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
   const [notificationMessage, setNotificationMessage] = useState("")
+  const [notificationType, setNotificationType] = useState("")
 
   const getPersons = () => {
     personsService.getPersons().then(p => setPersons(p))
@@ -121,7 +135,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage} type={notificationType}/>
       <SearchFilter setFilter={setFilter} />
 
       <PersonForm newName={newName}
@@ -131,11 +145,12 @@ const App = () => {
         persons={persons}
         setPersons={setPersons}
         setNotificationMessage={setNotificationMessage}
+        setNoficationType={setNotificationType}
       />
 
       <h2>Numbers</h2>
 
-      <Persons elements={shownPeople} persons={persons} setPersons={setPersons} setNotificationMessage={setNotificationMessage} />
+      <Persons elements={shownPeople} persons={persons} setPersons={setPersons} setNotificationMessage={setNotificationMessage} setNotificationType={setNotificationType} />
     </div>
 
   )

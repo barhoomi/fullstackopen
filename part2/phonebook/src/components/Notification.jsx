@@ -1,21 +1,38 @@
 
-const Notification = ({message}) => {
-    if(message == ""){
+const Notification = ({ message, type }) => {
+    if (message == "") {
         return null
     }
 
-    const style = {
-        backgroundColor: "lightgrey",
-        borderStyle: "solid",
-        borderColor: "green",
-        borderRadius: 10,
-        fontSize: 20,
-        color: "green",
+    let style
+
+    console.log("notification type",type)
+
+    if (type == "error") {
+        style = {
+            backgroundColor: "lightgrey",
+            borderStyle: "solid",
+            borderColor: "red",
+            borderRadius: 10,
+            fontSize: 20,
+            color: "red",
+        }
     }
+    else {
+        style = {
+            backgroundColor: "lightgrey",
+            borderStyle: "solid",
+            borderColor: "green",
+            borderRadius: 10,
+            fontSize: 20,
+            color: "green",
+        }
+    }
+
 
     const messageStyle = {
         marginLeft: 10,
-        padding:10
+        padding: 10
     }
 
 

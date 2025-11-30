@@ -8,9 +8,6 @@ app.use(express.json())
 app.use(express.static("dist"))
 
 
-
-// Error handler middleware
-
 app.get('/api/notes/:id', (request, response, next) => {
   const id = request.params.id
   Note.findById(id)
@@ -27,15 +24,7 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 
 app.post('/api/notes', (request, response, next) => {
-
-
   const body = request.body
-
-  if (!body.content) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
-  }
 
   const note = new Note({
     content: body.content,
@@ -59,7 +48,10 @@ app.delete('/api/notes/:id', (request, response, next) => {
 
 
 app.put('/api/notes/:id', (request, response, next) => {
-  const { content, important } = request.body
+  const {
+    content,
+    important
+  } = request.body
 
   Note.findById(request.params.id)
     .then(note => {
@@ -85,6 +77,7 @@ app.get('/api/notes', (request, response, next) => {
 
 
 
+// handle requests with unknown endpoints
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({
@@ -92,9 +85,7 @@ const unknownEndpoint = (request, response) => {
   })
 }
 
-// handler of requests with unknown endpoint
 app.use(unknownEndpoint)
-
 
 // the error-handling middleware has to be the last loaded middleware, also all the routes should be registered before the error-handler!
 
@@ -105,6 +96,10 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({
       error: 'malformatted id'
+    })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({
+      error: error.message
     })
   }
 
