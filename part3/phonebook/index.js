@@ -53,6 +53,7 @@ app.put("/api/persons/:id", (request, response , next) => {
         person.name = body.name
         person.number = body.number
         person.save()
+        response.json(person)
     }).catch(error => next(error))
 })
 
