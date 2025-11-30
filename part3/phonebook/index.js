@@ -1,6 +1,6 @@
 require("dotenv").config()
 const express = require("express")
-var morgan = require('morgan')
+var morgan = require("morgan")
 const Person = require("./models/person")
 
 
@@ -8,11 +8,11 @@ const app = express()
 app.use(express.json())
 app.use(express.static("dist"))
 
-morgan.token('body', function (req, res) {
+morgan.token("body", function (req) {
     return JSON.stringify(req.body)
 })
 
-app.use(morgan(':method :url :status :res[content-length] :body - :response-time ms'))
+app.use(morgan(":method :url :status :res[content-length] :body - :response-time ms"))
 
 
 
@@ -30,7 +30,7 @@ app.post("/api/persons", (request, response, next) => {
 
     newPerson.save().then(person => {
         response.json(person)
-        console.log(`successfully added new person`)
+        console.log("successfully added new person")
 
     }).catch(error => next(error))
 
@@ -67,19 +67,19 @@ app.delete("/api/persons/:id", (request, response, next) => {
 })
 
 app.get("/info", (request, response, next) => {
-    Person.find({}).then(people =>{
+    Person.find({}).then(people => {
         response.send(
-        `<p>Phonebook has info for ${people.length} people</p>
+            `<p>Phonebook has info for ${people.length} people</p>
         ${Date()}`
-    )
+        )
     }).catch(error => next(error))
-    
+
 })
 
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({
-        error: 'unknown endpoint'
+        error: "unknown endpoint"
     })
 }
 
