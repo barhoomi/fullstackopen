@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "no speed limit",
+    "author": "Derek Sivers",
+    "url": "http://sive.rs/kimo",
+    "likes": 1
+}
+
