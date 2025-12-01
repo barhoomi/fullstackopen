@@ -13,6 +13,7 @@ const favouriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
+    if(blogs.length == 0) return {}
     var authors = blogs.reduce((sum, blog) => {
         //console.log("author: ", blog.author, " sum: ", sum)
         if (blog.author in sum) {
@@ -26,13 +27,35 @@ const mostBlogs = (blogs) => {
     var authors = Object.keys(authors).map((key) => [key, authors[key]])
 
     const sortedAuthors = authors.sort((authorA, authorB) => authorB[1] - authorA[1])
-    console.log("sorted authors: ",sortedAuthors)
+    //console.log("sorted authors: ",sortedAuthors)
     return {"author":sortedAuthors[0][0], "blogs":sortedAuthors[0][1]}
+}
+
+const mostLikes = (blogs) => {
+    if(blogs.length == 0) return {}
+
+    var authors = blogs.reduce((sum, blog) => {
+        //console.log("author: ", blog.author, " sum: ", sum)
+        if (blog.author in sum) {
+            sum[blog.author] += blog.likes
+        }
+        else {
+            sum[blog.author] = blog.likes
+        }
+        return sum
+    }, {})
+    var authors = Object.keys(authors).map((key) => [key, authors[key]])
+
+    const sortedAuthors = authors.sort((authorA, authorB) => authorB[1] - authorA[1])
+    //console.log("sorted authors: ",sortedAuthors)
+    
+    return {"author":sortedAuthors[0][0], "likes":sortedAuthors[0][1]}
 }
 
 module.exports = {
     dummy,
     totalLikes,
     favouriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }

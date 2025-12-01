@@ -1,6 +1,6 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
-const { dummy, totalLikes, favouriteBlog, mostBlogs } = require('../utils/list_helper')
+const { dummy, totalLikes, favouriteBlog, mostBlogs, mostLikes } = require('../utils/list_helper')
 
 describe('dummy function', () => {
     test('dummy returns one', () => {
@@ -138,6 +138,24 @@ describe("Favourite Blog",()=>{
 
 
 describe("Most blogs", ()=>{
+    
+
+    test("Most blogs given an empty array",()=>{
+        const blogs = []
+        assert.deepStrictEqual(mostBlogs(blogs),{})
+    })
+
+    test("Most blogs given an array with one item", ()=>{
+        const blogs = [{
+                _id: "5a422a851b54a676234d17f7",
+                title: "React patterns",
+                author: "Michael Chan",
+                url: "https://reactpatterns.com/",
+                likes: 7
+            }]
+        assert.deepStrictEqual(mostBlogs(blogs),{"author":"Michael Chan","blogs":1})
+    })
+
     test("Most blogs given small array", ()=>{
         const blogs = [
             {
@@ -163,5 +181,52 @@ describe("Most blogs", ()=>{
             }
         ]
         assert.deepStrictEqual(mostBlogs(blogs),{"author":"Michael Chan","blogs":2})
+    })
+})
+
+
+describe("Most likes", ()=>{
+
+    test("Most likes given an empty array",()=>{
+        const blogs = []
+        assert.deepStrictEqual(mostLikes(blogs),{})
+    })
+
+    test("Most likes given an array with one item", ()=>{
+        const blogs = [{
+                _id: "5a422a851b54a676234d17f7",
+                title: "React patterns",
+                author: "Michael Chan",
+                url: "https://reactpatterns.com/",
+                likes: 7
+            }]
+        assert.deepStrictEqual(mostLikes(blogs),{"author":"Michael Chan","likes":7})
+    })
+
+    test("Most likes given small array", ()=>{
+        const blogs = [
+            {
+                _id: "5a422aa71b54a676234d17f8",
+                title: "Go To Statement Considered Harmful",
+                author: "Edsger W. Dijkstra",
+                url: "http://www.ucl.ac.uk/teaching/academic/academic-skills/academic-writing/academic-writing-structure",
+                likes: 6
+            },
+            {
+                _id: "5a422a851b54a676234d17f7",
+                title: "React patterns",
+                author: "Michael Chan",
+                url: "https://reactpatterns.com/",
+                likes: 7
+            },
+            {
+                _id: "5a422aa71b54a676234d17f8",
+                title: "Go To Statement Considered Harmful",
+                author: "Edsger W. Dijkstra",
+                url: "http://www.ucl.ac.uk/teaching/academic/academic-skills/academic-writing/academic-writing-structure",
+                likes: 5
+            }
+        ]
+        assert.deepStrictEqual(mostLikes(blogs),{"author":"Edsger W. Dijkstra","likes":11})
     })
 })
