@@ -28,7 +28,7 @@ const mostBlogs = (blogs) => {
 
     const sortedAuthors = authors.sort((authorA, authorB) => authorB[1] - authorA[1])
     //console.log("sorted authors: ",sortedAuthors)
-    return {"author":sortedAuthors[0][0], "blogs":sortedAuthors[0][1]}
+    return { "author":sortedAuthors[0][0], "blogs":sortedAuthors[0][1] }
 }
 
 const mostLikes = (blogs) => {
@@ -48,8 +48,8 @@ const mostLikes = (blogs) => {
 
     const sortedAuthors = authors.sort((authorA, authorB) => authorB[1] - authorA[1])
     //console.log("sorted authors: ",sortedAuthors)
-    
-    return {"author":sortedAuthors[0][0], "likes":sortedAuthors[0][1]}
+
+    return { "author":sortedAuthors[0][0], "likes":sortedAuthors[0][1] }
 }
 
 module.exports = {

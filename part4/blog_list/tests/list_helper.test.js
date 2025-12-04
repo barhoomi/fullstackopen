@@ -1,9 +1,9 @@
-const { test, describe } = require('node:test')
-const assert = require('node:assert')
-const { dummy, totalLikes, favouriteBlog, mostBlogs, mostLikes } = require('../utils/list_helper')
+const { test, describe } = require("node:test")
+const assert = require("node:assert")
+const { dummy, totalLikes, favouriteBlog, mostBlogs, mostLikes } = require("../utils/list_helper")
 
-describe('dummy function', () => {
-    test('dummy returns one', () => {
+describe("dummy function", () => {
+    test("dummy returns one", () => {
         const blogs = []
 
         const result = dummy(blogs)
@@ -11,7 +11,7 @@ describe('dummy function', () => {
     })
 })
 
-describe('total likes', () => {
+describe("total likes", () => {
 
     test("total likes of empty list is zero", () => {
         const blogs = []
@@ -58,13 +58,13 @@ describe('total likes', () => {
 })
 
 
-describe("Favourite Blog",()=>{
-    test("Favourite blog when blogs list is empty", ()=>{
+describe("Favourite Blog",() => {
+    test("Favourite blog when blogs list is empty", () => {
         const blogs = []
         assert.strictEqual(favouriteBlog(blogs),0)
     })
 
-    test("Favourite blog when blogs list has one blog", ()=>{
+    test("Favourite blog when blogs list has one blog", () => {
         const blogs = [
             {
                 _id: "5a422aa71b54a676234d17f8",
@@ -75,15 +75,15 @@ describe("Favourite Blog",()=>{
             }
         ]
         assert.deepStrictEqual(favouriteBlog(blogs),{
-                _id: "5a422aa71b54a676234d17f8",
-                title: "Go To Statement Considered Harmful",
-                author: "Edsger W. Dijkstra",
-                url: "http://www.ucl.ac.uk/teaching/academic/academic-skills/academic-writing/academic-writing-structure",
-                likes: 5
-            })
+            _id: "5a422aa71b54a676234d17f8",
+            title: "Go To Statement Considered Harmful",
+            author: "Edsger W. Dijkstra",
+            url: "http://www.ucl.ac.uk/teaching/academic/academic-skills/academic-writing/academic-writing-structure",
+            likes: 5
+        })
     })
 
-    test("Favourite blog when blogs list has two blogs", ()=>{
+    test("Favourite blog when blogs list has two blogs", () => {
         const blogs = [
             {
                 _id: "5a422aa71b54a676234d17f8",
@@ -101,15 +101,15 @@ describe("Favourite Blog",()=>{
             }
         ]
         assert.deepStrictEqual(favouriteBlog(blogs),{
-                _id: "5a422a851b54a676234d17f7",
-                title: "React patterns",
-                author: "Michael Chan",
-                url: "https://reactpatterns.com/",
-                likes: 7
-            })
+            _id: "5a422a851b54a676234d17f7",
+            title: "React patterns",
+            author: "Michael Chan",
+            url: "https://reactpatterns.com/",
+            likes: 7
+        })
     })
 
-    test("Favourite blog when blogs list has two blogs with switched order", ()=>{
+    test("Favourite blog when blogs list has two blogs with switched order", () => {
         const blogs = [
             {
                 _id: "5a422a851b54a676234d17f7",
@@ -127,36 +127,36 @@ describe("Favourite Blog",()=>{
             }
         ]
         assert.deepStrictEqual(favouriteBlog(blogs),{
-                _id: "5a422a851b54a676234d17f7",
-                title: "React patterns",
-                author: "Michael Chan",
-                url: "https://reactpatterns.com/",
-                likes: 7
-            })
+            _id: "5a422a851b54a676234d17f7",
+            title: "React patterns",
+            author: "Michael Chan",
+            url: "https://reactpatterns.com/",
+            likes: 7
+        })
     })
 })
 
 
-describe("Most blogs", ()=>{
-    
+describe("Most blogs", () => {
 
-    test("Most blogs given an empty array",()=>{
+
+    test("Most blogs given an empty array",() => {
         const blogs = []
         assert.deepStrictEqual(mostBlogs(blogs),{})
     })
 
-    test("Most blogs given an array with one item", ()=>{
+    test("Most blogs given an array with one item", () => {
         const blogs = [{
-                _id: "5a422a851b54a676234d17f7",
-                title: "React patterns",
-                author: "Michael Chan",
-                url: "https://reactpatterns.com/",
-                likes: 7
-            }]
-        assert.deepStrictEqual(mostBlogs(blogs),{"author":"Michael Chan","blogs":1})
+            _id: "5a422a851b54a676234d17f7",
+            title: "React patterns",
+            author: "Michael Chan",
+            url: "https://reactpatterns.com/",
+            likes: 7
+        }]
+        assert.deepStrictEqual(mostBlogs(blogs),{ "author":"Michael Chan","blogs":1 })
     })
 
-    test("Most blogs given small array", ()=>{
+    test("Most blogs given small array", () => {
         const blogs = [
             {
                 _id: "5a422a851b54a676234d17f7",
@@ -180,30 +180,30 @@ describe("Most blogs", ()=>{
                 likes: 5
             }
         ]
-        assert.deepStrictEqual(mostBlogs(blogs),{"author":"Michael Chan","blogs":2})
+        assert.deepStrictEqual(mostBlogs(blogs),{ "author":"Michael Chan","blogs":2 })
     })
 })
 
 
-describe("Most likes", ()=>{
+describe("Most likes", () => {
 
-    test("Most likes given an empty array",()=>{
+    test("Most likes given an empty array",() => {
         const blogs = []
         assert.deepStrictEqual(mostLikes(blogs),{})
     })
 
-    test("Most likes given an array with one item", ()=>{
+    test("Most likes given an array with one item", () => {
         const blogs = [{
-                _id: "5a422a851b54a676234d17f7",
-                title: "React patterns",
-                author: "Michael Chan",
-                url: "https://reactpatterns.com/",
-                likes: 7
-            }]
-        assert.deepStrictEqual(mostLikes(blogs),{"author":"Michael Chan","likes":7})
+            _id: "5a422a851b54a676234d17f7",
+            title: "React patterns",
+            author: "Michael Chan",
+            url: "https://reactpatterns.com/",
+            likes: 7
+        }]
+        assert.deepStrictEqual(mostLikes(blogs),{ "author":"Michael Chan","likes":7 })
     })
 
-    test("Most likes given small array", ()=>{
+    test("Most likes given small array", () => {
         const blogs = [
             {
                 _id: "5a422aa71b54a676234d17f8",
@@ -227,6 +227,6 @@ describe("Most likes", ()=>{
                 likes: 5
             }
         ]
-        assert.deepStrictEqual(mostLikes(blogs),{"author":"Edsger W. Dijkstra","likes":11})
+        assert.deepStrictEqual(mostLikes(blogs),{ "author":"Edsger W. Dijkstra","likes":11 })
     })
 })
