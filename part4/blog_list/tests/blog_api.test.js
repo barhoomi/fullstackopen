@@ -1,15 +1,39 @@
-const { test, after } = require("node:test")
+const { test, after, beforeEach } = require("node:test")
+const assert = require("node:assert")
 const mongoose = require("mongoose")
 const supertest = require("supertest")
+const logger = require("../utils/logger")
 const app = require("../app")
-
+const Blog = require("../models/blog")
+const helper = require("./test_helper")
 const api = supertest(app)
 
-test("blogs are returned as json", async () => {
-    await api
-        .get("/api/blogs")
-        .expect(200)
-        .expect("Content-Type", /application\/json/)
+
+
+
+beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    let blogObject = new Blog(helper.initialBlogs[0])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[1])
+    await blogObject.save()
+})
+
+// test("blogs are returned as json", async () => {
+//     const blogs = await api
+//         .get("/api/blogs")
+//         .expect(200)
+//         .expect("Content-Type", /application\/json/)
+//     console.log("Blogs:??",blogs)
+//     assert.strictEqual(blogs.length,helper.initialBlogs.length)
+// })
+
+test.only("all blogs are returned", async () => {
+    const blogs = await api.get("/api/blogs")
+    //logger.info(response.body)
+    assert.strictEqual(blogs.body.length, helper.initialBlogs.length)
 })
 
 after(async () => {
