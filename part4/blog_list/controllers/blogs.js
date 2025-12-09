@@ -15,8 +15,7 @@ blogsRouter.get("/", (request, response) => {
 
 blogsRouter.get("/api/blogs", async (request, response) => {
     const blogs = await Blog.find({})
-    response.status(200)
-    response.json(blogs)
+    response.status(200).json(blogs)
 })
 
 blogsRouter.post("/api/blogs", (request, response) => {

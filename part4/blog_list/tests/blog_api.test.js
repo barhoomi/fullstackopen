@@ -32,8 +32,14 @@ beforeEach(async () => {
 
 test.only("all blogs are returned", async () => {
     const blogs = await api.get("/api/blogs")
-    //logger.info(response.body)
+    logger.info(blogs.body)
     assert.strictEqual(blogs.body.length, helper.initialBlogs.length)
+})
+
+test.only("unique identifier property of the blog posts is named id", async () => {
+    const blogs = await api.get("/api/blogs")
+    assert.strictEqual(blogs.body.length, blogs.body.map(blog => blog.id).length)
+    assert.strictEqual(0, blogs.body.filter(blog => blog["_id"]!==undefined).length)
 })
 
 after(async () => {
