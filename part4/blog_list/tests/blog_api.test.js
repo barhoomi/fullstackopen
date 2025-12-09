@@ -67,7 +67,7 @@ test("making an HTTP POST request to the /api/blogs URL successfully creates a n
     logger.info(blogs.body)
 })
 
-test.only("missing likes property defaults to 0", async () => {
+test("missing likes property defaults to 0", async () => {
     const newPostId = "892c44bdfecbea804ddd6bea"
     const newPost = {
         title: "You make your perfect world",
@@ -83,7 +83,64 @@ test.only("missing likes property defaults to 0", async () => {
         .expect("Content-Type", /application\/json/)
 
     const newBlog = await api.get(`/api/blogs/${newPostId}`).expect(200)
-    assert.strictEqual(newBlog.body.likes,0)
+    assert.strictEqual(newBlog.body.likes, 0)
+})
+
+
+test.only("missing title returns status code 400", async () => {
+    const newPostId = "892c44bdfecbea804ddd6bea"
+    const newPost = {
+        author: "Derek Sivers",
+        url: "https://sive.rs/ayw8",
+        _id: newPostId,
+        likes: 100
+    }
+
+    const response = await api
+        .post("/api/blogs")
+        .send(newPost)
+        .expect(400)
+        .expect("Content-Type", /application\/json/)
+
+
+    assert.strictEqual(response.statusCode, 400)
+})
+
+test.only("missing url returns status code 400", async () => {
+    const newPostId = "892c44bdfecbea804ddd6bea"
+    const newPost = {
+        title: "Title",
+        author: "Derek Sivers",
+        _id: newPostId,
+        likes: 100
+    }
+
+    const response = await api
+        .post("/api/blogs")
+        .send(newPost)
+        .expect(400)
+        .expect("Content-Type", /application\/json/)
+
+
+    assert.strictEqual(response.statusCode, 400)
+})
+
+test.only("missing url and title returns status code 400", async () => {
+    const newPostId = "892c44bdfecbea804ddd6bea"
+    const newPost = {
+        author: "Derek Sivers",
+        _id: newPostId,
+        likes: 100
+    }
+
+    const response = await api
+        .post("/api/blogs")
+        .send(newPost)
+        .expect(400)
+        .expect("Content-Type", /application\/json/)
+
+
+    assert.strictEqual(response.statusCode, 400)
 })
 
 after(async () => {

@@ -1,5 +1,6 @@
 const blogsRouter = require("express").Router()
 const Blog = require("../models/blog")
+const { requestLogger } = require("../utils/middleware")
 
 blogsRouter.get("/", (request, response) => {
     response.send("<h1>Hello World!</h1>")
@@ -10,12 +11,12 @@ blogsRouter.get("/api/blogs", async (request, response) => {
     response.status(200).json(blogs)
 })
 
-blogsRouter.post("/api/blogs", (request, response) => {
-    const blog = new Blog(request.body)
+blogsRouter.post("/api/blogs", async (request, response) => {
+    const newBlog = new Blog(request.body)
 
-    blog.save().then((result) => {
-        response.status(201).json(result)
-    })
+    const blog = await newBlog.save()
+    response.status(201).json(blog)
+
 })
 
 blogsRouter.get("/api/blogs/:id", async (request, response, next) => {
