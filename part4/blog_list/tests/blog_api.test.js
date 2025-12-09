@@ -30,16 +30,41 @@ beforeEach(async () => {
 //     assert.strictEqual(blogs.length,helper.initialBlogs.length)
 // })
 
-test.only("all blogs are returned", async () => {
+test("all blogs are returned", async () => {
     const blogs = await api.get("/api/blogs")
     logger.info(blogs.body)
     assert.strictEqual(blogs.body.length, helper.initialBlogs.length)
 })
 
-test.only("unique identifier property of the blog posts is named id", async () => {
+test("unique identifier property of the blog posts is named id", async () => {
     const blogs = await api.get("/api/blogs")
     assert.strictEqual(blogs.body.length, blogs.body.map(blog => blog.id).length)
-    assert.strictEqual(0, blogs.body.filter(blog => blog["_id"]!==undefined).length)
+    assert.strictEqual(0, blogs.body.filter(blog => blog["_id"] !== undefined).length)
+})
+
+test.only("making an HTTP POST request to the /api/blogs URL successfully creates a new blog post", async () => {
+
+    const newPostId = "892c44bdfecbea804ddd6bea"
+    const newPost = {
+        title: "You make your perfect world",
+        author: "Derek Sivers",
+        url: "https://sive.rs/ayw8",
+        likes: 4,
+        _id:newPostId
+    }
+
+    await api
+        .post("/api/blogs")
+        .send(newPost)
+        .expect(201)
+        .expect("Content-Type", /application\/json/)
+
+
+    const blogs = await api.get("/api/blogs")
+    const newBlog = await api.get(`/api/blogs/${newPostId}`).expect(200)
+    assert.strictEqual(blogs.body.length, helper.initialBlogs.length + 1)
+    assert.notStrictEqual(newBlog,undefined)
+    logger.info(blogs.body)
 })
 
 after(async () => {

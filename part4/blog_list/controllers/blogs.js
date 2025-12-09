@@ -5,14 +5,6 @@ blogsRouter.get("/", (request, response) => {
     response.send("<h1>Hello World!</h1>")
 })
 
-// blogsRouter.get("/api/blogs", (request, response) => {
-//     Blog.find({}).then((blogs) => {
-//         response.status(200)
-//         response.json(blogs)
-//     })
-// })
-
-
 blogsRouter.get("/api/blogs", async (request, response) => {
     const blogs = await Blog.find({})
     response.status(200).json(blogs)
@@ -24,6 +16,21 @@ blogsRouter.post("/api/blogs", (request, response) => {
     blog.save().then((result) => {
         response.status(201).json(result)
     })
+})
+
+blogsRouter.get("/api/blogs/:id", async (request, response, next) => {
+    try {
+        const blog = await Blog.findById(request.params.id)
+        if (blog) {
+            response.status(200).json(blog)
+        }
+        else {
+            response.status(404).end()
+        }
+    }
+    catch (exception) {
+        next(exception)
+    }
 })
 
 module.exports = blogsRouter
