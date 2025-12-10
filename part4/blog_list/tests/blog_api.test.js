@@ -143,7 +143,7 @@ test("missing url and title returns status code 400", async () => {
     assert.strictEqual(response.statusCode, 400)
 })
 
-test.only("blog post can be deleted", async () => {
+test("blog post can be deleted", async () => {
 
     const blogsBefore = await helper.blogsInDb()
     const length1 = blogsBefore.length
@@ -155,6 +155,20 @@ test.only("blog post can be deleted", async () => {
 
     assert.strictEqual(length2, length1 - 1)
 
+})
+
+test.only("blog post can be updated", async () => {
+    const blogs = await helper.blogsInDb()
+    const blogBefore = blogs[0]
+
+    blogBefore.url = "https://google.com"
+
+    const updatedBlog = await api.put(`/api/blogs/${blogBefore.id}`)
+        .send(blogBefore)
+        .expect(200)
+        .expect("Content-Type", /application\/json/)
+
+    assert.deepStrictEqual(updatedBlog.body,blogBefore)
 })
 
 after(async () => {

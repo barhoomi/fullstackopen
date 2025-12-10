@@ -6,19 +6,21 @@ const initialBlogs = [
         author: "Derek Sivers",
         url: "https://sive.rs/kimo",
         likes: 1,
+        _id: "777c44bdfecbea804ddd6bea"
     },
     {
         title: "You make your perfect world",
         author: "Derek Sivers",
         url: "https://sive.rs/ayw8",
         likes: 4,
+        _id: "692c44bdfecbea604ddd6bea"
     },
     {
         title: "You play your own game",
         author: "Derek Sivers",
         url: "https://sive.rs/xxx",
         likes: 400,
-        _id: "892c44bdfecbea804ddd6bea"
+        _id: "888c44bdfecbea804ddd6bea"
     }
 ]
 

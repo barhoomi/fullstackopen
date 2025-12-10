@@ -1,4 +1,5 @@
 const blogsRouter = require("express").Router()
+const { request } = require("../app")
 const Blog = require("../models/blog")
 const { requestLogger } = require("../utils/middleware")
 
@@ -41,6 +42,35 @@ blogsRouter.delete("/api/blogs/:id", async (request, response, next) => {
         response.status(204).end()
     } catch (exception) {
         next(exception)
+    }
+})
+
+blogsRouter.put("/api/blogs/:id", async (request, response, next) => {
+    const id = request.params.id
+    const {
+        title,
+        author,
+        url,
+        likes
+    } = request.body
+
+    try {
+        const blog = await Blog.findById(id)
+
+        if (!blog) {
+            return response.status(404).end()
+        }
+
+        blog.title = title
+        blog.author = author
+        blog.url = url
+        blog.likes = likes
+
+        const updatedBlog = await blog.save()
+        response.json(updatedBlog).status(200)
+    }
+    catch (error) {
+        next(error)
     }
 })
 
