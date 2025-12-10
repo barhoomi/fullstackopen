@@ -14,11 +14,11 @@ const api = supertest(app)
 beforeEach(async () => {
     await Blog.deleteMany({})
 
-    let blogObject = new Blog(helper.initialBlogs[0])
-    await blogObject.save()
+    for (let blog of helper.initialBlogs) {
+        let blogObject = new Blog(blog)
+        await blogObject.save()
+    }
 
-    blogObject = new Blog(helper.initialBlogs[1])
-    await blogObject.save()
 })
 
 // test("blogs are returned as json", async () => {
@@ -87,7 +87,7 @@ test("missing likes property defaults to 0", async () => {
 })
 
 
-test.only("missing title returns status code 400", async () => {
+test("missing title returns status code 400", async () => {
     const newPostId = "892c44bdfecbea804ddd6bea"
     const newPost = {
         author: "Derek Sivers",
@@ -106,7 +106,7 @@ test.only("missing title returns status code 400", async () => {
     assert.strictEqual(response.statusCode, 400)
 })
 
-test.only("missing url returns status code 400", async () => {
+test("missing url returns status code 400", async () => {
     const newPostId = "892c44bdfecbea804ddd6bea"
     const newPost = {
         title: "Title",
@@ -125,7 +125,7 @@ test.only("missing url returns status code 400", async () => {
     assert.strictEqual(response.statusCode, 400)
 })
 
-test.only("missing url and title returns status code 400", async () => {
+test("missing url and title returns status code 400", async () => {
     const newPostId = "892c44bdfecbea804ddd6bea"
     const newPost = {
         author: "Derek Sivers",
@@ -141,6 +141,20 @@ test.only("missing url and title returns status code 400", async () => {
 
 
     assert.strictEqual(response.statusCode, 400)
+})
+
+test.only("blog post can be deleted", async () => {
+
+    const blogsBefore = await helper.blogsInDb()
+    const length1 = blogsBefore.length
+
+    await api.delete("/api/blogs/892c44bdfecbea804ddd6bea").expect(204)
+
+    const blogsAfter = await helper.blogsInDb()
+    const length2 = blogsAfter.length
+
+    assert.strictEqual(length2, length1 - 1)
+
 })
 
 after(async () => {

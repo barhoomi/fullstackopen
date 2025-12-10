@@ -12,6 +12,13 @@ const initialBlogs = [
         author: "Derek Sivers",
         url: "https://sive.rs/ayw8",
         likes: 4,
+    },
+    {
+        title: "You play your own game",
+        author: "Derek Sivers",
+        url: "https://sive.rs/xxx",
+        likes: 400,
+        _id: "892c44bdfecbea804ddd6bea"
     }
 ]
 
