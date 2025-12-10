@@ -34,4 +34,15 @@ blogsRouter.get("/api/blogs/:id", async (request, response, next) => {
     }
 })
 
+blogsRouter.delete("/api/blogs/:id", async (request, response, next) => {
+
+
+    // Implement functionality for deleting a single blog post resource.
+    // Use the async/await syntax. Follow RESTful conventions when defining the HTTP API.
+    // Implement tests for the functionality.
+
+    const id = request.params.id
+
+})
+
 module.exports = blogsRouter
