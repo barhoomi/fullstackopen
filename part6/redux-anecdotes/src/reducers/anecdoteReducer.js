@@ -28,15 +28,20 @@ const reducer = (state = initialState, action) => {
       const current = state.find(anecdote => anecdote.id == payload.id)
       const updatedAnecdote = {...current,votes:current.votes + 1}
       const newState = state.map(i => i.id==payload.id?updatedAnecdote:i)
-      return newState
+      return sortByVotes(newState)
     }
     case "CREATE":{
       const newState = state.concat(asObject(payload.content))
-      return newState
+      return sortByVotes(newState)
     }
     default:
-      return state
+      return sortByVotes(state)
   }
+}
+
+const sortByVotes = (state) => {
+  console.log("sorting by votes")
+  return state.sort((a,b)=>b.votes-a.votes)
 }
 
 export const voteForId = (id) => {
