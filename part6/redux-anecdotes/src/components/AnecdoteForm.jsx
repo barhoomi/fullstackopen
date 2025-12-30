@@ -3,7 +3,7 @@ import { useState } from "react"
 import { createNewAnecdote } from "../reducers/anecdoteReducer"
 
 
-const CreationForm = () => {
+const AnecdoteForm = () => {
     const [formValue, setFormValue] = useState("")
     const dispatch = useDispatch()
 
@@ -25,4 +25,5 @@ const CreationForm = () => {
     )
 }
 
-export default CreationForm
+
+export default AnecdoteForm

@@ -1,22 +1,11 @@
 import Anecdotes from "./components/Anecdotes"
-import { useState } from "react"
-import { createNewAnecdote } from "./reducers/anecdoteReducer"
-import { useDispatch } from "react-redux"
-import CreationForm from "./components/CreationForm"
+import AnecdoteForm from "./components/AnecdoteForm"
 
 const App = () => {
-  const [formValue, setFormValue] = useState("")
-  const dispatch = useDispatch()
-
-  const handleFormSubmission = (e) => {
-    e.preventDefault()
-    dispatch(createNewAnecdote(formValue))
-    setFormValue("")
-  }
   return (
     <div>
       <Anecdotes />
-      <CreationForm />
+      <AnecdoteForm />
     </div>
   )
 }
