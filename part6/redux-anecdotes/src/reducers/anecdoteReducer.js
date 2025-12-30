@@ -30,10 +30,12 @@ const reducer = (state = initialState, action) => {
       const newState = state.map(i => i.id==payload.id?updatedAnecdote:i)
       return sortByVotes(newState)
     }
+
     case "CREATE":{
       const newState = state.concat(asObject(payload.content))
       return sortByVotes(newState)
     }
+    
     default:
       return sortByVotes(state)
   }
