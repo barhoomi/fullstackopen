@@ -13,15 +13,12 @@ const AnecdoteForm = () => {
         setFormValue("")
     }
     return (
-        <div>
-            <h2>create new</h2>
-            <form onSubmit={(e) => handleFormSubmission(e)}>
-                <div>
-                    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-                </div>
-                <button>create</button>
-            </form>
-        </div>
+        <form onSubmit={(e) => handleFormSubmission(e)}>
+            <div>
+                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+            </div>
+            <button>create</button>
+        </form>
     )
 }
 
