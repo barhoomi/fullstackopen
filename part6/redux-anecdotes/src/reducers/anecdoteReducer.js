@@ -1,5 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
-
+import { setNotification } from './notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -30,19 +31,35 @@ const anecdoteSlice = createSlice({
       const newState = state.concat(asObject(action.payload))
       return sortByVotes(newState)
     },
-    voteForId(state, action) {
-      const current = state.find(anecdote => anecdote.id == action.payload)
-      const updatedAnecdote = { ...current, votes: current.votes + 1 }
-      const newState = state.map(i => i.id == action.payload ? updatedAnecdote : i)
-      return sortByVotes(newState)
+    voteForId: {
+      // 1. The reducer handles the state change
+      reducer(state, action) {
+        const { id } = action.payload // Destructure the id from our custom payload
+        const anecdoteToChange = state.find(n => n.id === id)
+        const changedAnecdote = { 
+          ...anecdoteToChange, 
+          votes: anecdoteToChange.votes + 1 
+        }
+        const newState = state.map(anecdote =>
+          anecdote.id !== id ? anecdote : changedAnecdote
+        )
+        return sortByVotes(newState)
+      },
+      // 2. The prepare function formats the payload
+      prepare(id, content) {
+        return {
+          payload: { id, content }
+        }
+      }
     }
-
   }
 })
+
 
 const sortByVotes = (state) => {
   return state.sort((a, b) => b.votes - a.votes)
 }
+
 
 export const { createNewAnecdote, voteForId } = anecdoteSlice.actions
 export default anecdoteSlice.reducer
