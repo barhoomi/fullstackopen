@@ -21,12 +21,14 @@ const Anecdote = ({ anecdote }) => {
 }
 
 const AnecdoteList = () => {
-    const anecdotes = useSelector(state => state)
+    const anecdotes = useSelector(state => state.anecdotes)
+    const filter = useSelector(state=> state.filter)
+    const filteredAnecdotes = anecdotes.filter(a => a.content.includes(filter) )
 
     return (
         <div>
             {
-                anecdotes.map(anecdote => (
+                filteredAnecdotes.map(anecdote => (
                     <Anecdote key={anecdote.id} anecdote={anecdote} />
                 ))
             }
