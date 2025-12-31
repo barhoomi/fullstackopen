@@ -23,7 +23,7 @@ const Anecdote = ({ anecdote }) => {
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
     const filter = useSelector(state=> state.filter)
-    const filteredAnecdotes = anecdotes.filter(a => a.content.includes(filter) )
+    const filteredAnecdotes = anecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()) )
 
     return (
         <div>
