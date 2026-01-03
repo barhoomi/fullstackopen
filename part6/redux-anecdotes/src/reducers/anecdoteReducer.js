@@ -19,7 +19,7 @@ const anecdoteSlice = createSlice({
   initialState,
   reducers: {
     createNewAnecdote(state, action) {
-      const newState = state.concat(asObject(action.payload))
+      const newState = state.concat(action.payload)
       return sortByVotes(newState)
     },
     voteForId: {
