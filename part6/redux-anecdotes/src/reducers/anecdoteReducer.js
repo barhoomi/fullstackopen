@@ -26,22 +26,17 @@ const anecdoteSlice = createSlice({
     voteForId: {
       // 1. The reducer handles the state change
       reducer(state, action) {
-        const { id } = action.payload // Destructure the id from our custom payload
-        const anecdoteToChange = state.find(n => n.id === id)
+        console.log(action.payload)
+        const { id, votes, content } = action.payload // Destructure the id from our custom payload
         const changedAnecdote = { 
-          ...anecdoteToChange, 
-          votes: anecdoteToChange.votes + 1 
+          id: id,
+          content: content,
+          votes: votes 
         }
         const newState = state.map(anecdote =>
           anecdote.id !== id ? anecdote : changedAnecdote
         )
         return sortByVotes(newState)
-      },
-      // 2. The prepare function formats the payload
-      prepare(id, content) {
-        return {
-          payload: { id, content }
-        }
       }
     },
     setAnecdotes(state,action){
@@ -64,6 +59,14 @@ export const createNewAnecdote = (content) => {
       const newAnecdote = await anecdoteService.createNew(content)
       dispatch(createNew(newAnecdote))
   }  
+}
+
+export const setVotes = (id,votes,content) => {
+  return async (dispatch) => {
+    const vote = await anecdoteService.setVotes(id,votes,content)
+    console.log(vote)
+    dispatch(voteForId(vote))
+  }
 }
 
 

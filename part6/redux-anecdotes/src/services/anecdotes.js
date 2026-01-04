@@ -27,6 +27,22 @@ const createNew = async (content) => {
     return await response.json()
 }
 
+const setVotes = async (id, votes, content) => {
+    const options = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ votes:votes, id:id,content:content })
+    }
+    const response = await fetch(`${baseUrl}/${id}`, options)
+
+    if(!response.ok){
+        throw new Error("Error - vote not done")
+    }
+    return await response.json()
+}
 
 
-export default { getAll, createNew }
+
+export default { getAll, createNew, setVotes }
