@@ -1,18 +1,16 @@
 import { useDispatch } from "react-redux"
 import { useState } from "react"
 import { createNewAnecdote } from "../reducers/anecdoteReducer"
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
     const [formValue, setFormValue] = useState("")
     const dispatch = useDispatch()
 
     const handleFormSubmission = async (e) => {
+        const value = formValue
         setFormValue("")
         e.preventDefault()
-
-        const newAnecdote = await anecdoteService.createNew(formValue)
-        dispatch(createNewAnecdote(newAnecdote))
+        dispatch(createNewAnecdote(value))
     }
     return (
         <form onSubmit={(e) => handleFormSubmission(e)}>
