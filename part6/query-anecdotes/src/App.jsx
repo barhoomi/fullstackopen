@@ -21,7 +21,7 @@ const App = () => {
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes,
     refetchOnWindowFocus: false,
-    retry: false
+    retry: 3
   })
 
   if (result.isLoading) {
