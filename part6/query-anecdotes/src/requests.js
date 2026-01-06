@@ -18,9 +18,11 @@ export const createNewAnecdote = async (newAnecdote) => {
         },
         body: JSON.stringify(newAnecdote)
     }
-    const response = fetch(baseUrl, options)
+    const response = await fetch(baseUrl, options)
     if (!response.ok) {
-        throw new Error("Anecdotes not returned")
+        const error = (await response.json()).error
+        console.log(error)
+        throw new Error(error)
     }
     return await response.json()
 

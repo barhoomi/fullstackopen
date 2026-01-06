@@ -9,7 +9,6 @@ import Anecdotes from './components/Anecdotes'
 const App = () => {
 
 
-
   return (
     <NotificationContextProvider>
 
@@ -17,9 +16,9 @@ const App = () => {
         <h3>Anecdote app</h3>
 
         <Notification />
-        <AnecdoteForm />
+        <AnecdoteForm/>
 
-        <Anecdotes/>
+        <Anecdotes />
       </div>
     </NotificationContextProvider>
   )

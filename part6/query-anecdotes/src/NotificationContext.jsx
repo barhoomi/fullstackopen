@@ -4,8 +4,6 @@ import { useReducer } from "react"
 const NotificationContext = createContext()
 
 const NotificationReducer = (state, action) => {
-  console.log("outside")
-  console.log("action", action)
   switch (action.type) {
     case 'VOTE':
       return `you voted for "${action.payload.content}`
@@ -13,6 +11,8 @@ const NotificationReducer = (state, action) => {
       return `you created the anecdote "${action.payload.content}"`
     case 'RESET':
       return ""
+    case 'SET':
+      return String(action.payload)
     default:
       return state
   }
